@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -7,8 +6,20 @@ var express = require('express');
 
 var app = module.exports = express.createServer();
 
-// Configuration
+//socket.io chat 
+var chat = require("socket.io").listen(app);
 
+chat
+  .of("/join")
+  .on("conntection",function(socket){
+   console.log("test socket");
+});
+
+setInterval(4000,function(){
+  chat.emit("message",{data:"test"}); 
+});
+
+// Configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
@@ -33,7 +44,7 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    title: 'Sonar'
   });
 });
 
