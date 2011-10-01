@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src='/socket.io/socket.io.js'></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+  </head>
+  <body>
+    <h1>hello</h1>
+    <script type="text/javascript">
+      $(function(){
+        var socket = io.connect(),
+            chat = io.connect('http://localhost/chat'),
+            news = io.connect('http://localhost/news');
+
+        chat.on('connect', function(){
+          chat.emit('hi!');
+        });
+
+        chat.on('a message', function(message){
+          console.log('chat get the',message);
+        });
+
+        news.on('news', function(item){
+          news.emit('woot');
+          console.log('news get:',item);
+        });
+
+        socket.on('news', function(data){
+          $('body').append("<h3>"+ data.hello +"</h3>") 
+          socket.emit('my other event', { my: 'data'});
+          socket.emit('set nickname', 'Jimmy');
+        });
+
+        socket.on('ready',function(data){
+          console.log("ready for " + data);
+        });
+      });
+    </script>
+  </body>
+</html>
