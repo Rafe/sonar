@@ -9,17 +9,17 @@ var express = require('express');
 var app = module.exports = express.createServer();
 
 //socket.io chat 
-var chat = require("socket.io").listen(app);
+var io = require("socket.io").listen(app);
 
-chat
-  .of("/join")
-  .on("conntection",function(socket){
-   console.log("test socket");
+io.sockets.on("conntection",function(socket){
+   console.log("User Connected");
 });
 
-setInterval(4000,function(){
-  chat.emit("message",{data:"test"}); 
-});
+var count = 0;
+setInterval(function(){
+  console.log("send message "+count++)
+  io.sockets.emit("message",{ data:"test"+count } ); 
+},4000);
 
 // Configuration
 app.configure(function(){
