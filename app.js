@@ -4,14 +4,20 @@
 
 var express = require('express');
 
-var app = module.exports = express.createServer();
+var app = express.createServer();
 
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
-
 io.sockets.on("connection",function(socket){
+
    console.log("User Connected");
+
+   socket.on("join",function(data){
+     console.log("User Joined "+ data.user);
+     io.sockets.emit("join",data);
+   });
+
    socket.on("message",function(data){
      data.date = new Date();
      console.log("running message");
