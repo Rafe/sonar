@@ -8,17 +8,18 @@ a{
 }
 
 .content{
-  background-color:#AAA;
+height:250px;
+overflow:auto;
 }
 
-.chat-box{
+/*.chat-box{
   position:fixed;
   border-radius: 30px;
   background-color:#EEE;
   top:80px;
   left:600px;
   width:350px;
-}
+}*/
     #wrapper {
         padding:0px;
     }

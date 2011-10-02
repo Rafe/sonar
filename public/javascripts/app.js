@@ -19,7 +19,8 @@ $(function(){
     addMessage(data);
   });
 
-  $("#say").keypress(function(event){
+// $("#say").keypress(function(event){
+  $("#say").live('keypress', function(event){
     var data = $(event.target).val();
     
     if(event.which == 13){
