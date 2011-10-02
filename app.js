@@ -21,7 +21,9 @@ io.sockets.on("connection",function(socket){
    socket.on("message",function(data){
      data.date = new Date();
      console.log("running message");
-     io.sockets.emit("message",data); 
+     if(data.room){
+       io.sockets.of("/room/"+data.room).emit("message",data); 
+     }
    });
 });
 
