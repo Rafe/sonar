@@ -2,7 +2,11 @@
  * Module dependencies.
  */
 
+<<<<<<< HEAD
 //test
+=======
+//chat
+>>>>>>> 02916257a755bb0b2cbb255553e8d79427c9c6b8
 
 var express = require('express');
 
