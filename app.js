@@ -6,6 +6,19 @@ var express = require('express');
 
 var app = express.createServer();
 
+/*  foursquare  */
+var config = {
+  "secrets" : {
+    "clientId" : "RJQIJESWVTS4NH4MFD4M0R4XWP0GTT4N540UGLMODADMOG4S",
+    "clientSecret" : "TU0Z0TAVCI21IK3Q4ZEMZWJ4CTWYQCGJNZ2E2Z4ECJV1X5ZG",
+    "redirectUrl" : "http://miimenu.com/callback"
+  }
+}
+
+var foursquare = require("node-foursquare")(config);
+
+
+
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
@@ -58,5 +71,34 @@ app.get('/', function(req, res){
   });
 });
 
+/**********************************************************/
+app.get('/login', function(req, res) {
+  res.writeHead(303, { "location	": Foursquare.getAuthClientRedirectUrl() });
+  res.end();
+});
+
+app.get('/callback', function (req, res) {
+  Foursquare.getAccessToken({
+    code: req.query.code
+	redirect_uri: "http://miimenu.com/callback",
+    client_id: "RJQIJESWVTS4NH4MFD4M0R4XWP0GTT4N540UGLMODADMOG4S",
+    client_secret: "TU0Z0TAVCI21IK3Q4ZEMZWJ4CTWYQCGJNZ2E2Z4ECJV1X5ZG"
+  }, function (error, accessToken) {
+	if(error) {
+      res.send("An error was thrown: " + error.message);
+    }
+    else {
+      // Save the accessToken and redirect.
+    }
+  });
+});
+/**********************************************************/
+
+
+
+
+
+
 app.listen(80);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
