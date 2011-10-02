@@ -68,17 +68,19 @@ overflow:auto;
 	float: left;
 }
 .checkin {
-   background:  #ec644b;
-    border-radius: 8px 8px 8px 8px;
-    padding: 3px;
-    position: absolute;
-    right: 20px;
+background: #EC644B;
+border-radius: 8px 8px 8px 8px;
+padding: 3px;
+position: absolute;
+right: 20px;
+width: 150px;
 }
 .connect {
-    color: white;
-    display: inline;
-    font-size: 18px;
-    font-weight: bold;
-    margin: 4px;
-    position: relative;
-    top: 8px;}
+color: white;
+display: inline;
+font-size: 18px;
+font-weight: bold;
+margin: 10px;
+position: relative;
+top: 10px;
+}
