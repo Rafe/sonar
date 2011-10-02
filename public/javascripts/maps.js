@@ -43,9 +43,9 @@ if (GBrowserIsCompatible()) {
     // === Plot the markers ===
     for (var i=0; i<jsonData.markers.length; i++) {
       var point = new GLatLng(jsonData.markers[i].lat, jsonData.markers[i].lng);
-      var chatHtml = '<div class="content"><div class="chat-box"><h3>' + 
+      var chatHtml = '<div class="content"><div class="chat-box popup"><h3>' + 
         jsonData.markers[i].chat + '</h3><div id="avatars" class="avatars">' + 
-        jsonData.markers[i].users + 
+        /*jsonData.markers[i].users*/'<img src="https://graph.facebook.com/jimmytcchao/picture?type=small"/><img src="https://graph.facebook.com/42403930/picture?type=small"/><img src="http://thestart.me/images/avatars/darenb.png"/><img src="https://graph.facebook.com/1105177/picture?type=large"/><div style="clear:both;">&nbsp;</div>' + 
         '</div><ul id="chatroom"></ul><input id="say" type="text"></input></div></div>';
       var marker = createMarker(point, jsonData.markers[i].chat, chatHtml);
       map.addOverlay(marker);
