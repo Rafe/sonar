@@ -23,6 +23,8 @@ io.sockets.on("connection",function(socket){
      console.log("running message");
      if(data.room){
        io.sockets.of("/room/"+data.room).emit("message",data); 
+     } else{
+       io.sockets.emit("message",data); 
      }
    });
 });
