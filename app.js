@@ -128,7 +128,11 @@ app.get('/callback', function (req, res) {
       res.send("An error was thrown: " + error.message);
     } else {
       token = accessToken;
-      res.redirect("/");
+      foursquare.Users.getUser("self",accessToken,function(error,data){
+        console.log(data);
+        res.cookie("me",data.user.firstName);
+        res.redirect("/");
+      });
     }
   });
 });

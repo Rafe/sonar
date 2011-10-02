@@ -18,6 +18,7 @@ $(function(){
     _.each(data.messages,function(message){
       addMessage(message); 
     });
+    $("#chatroom").append("<li>"+ config.me+ " Join "+ data.room +"</li>");
     //updateUsers(data.users);
   });
 
