@@ -2,11 +2,9 @@
  * Module dependencies.
  */
 
-//chat
-
 var express = require('express');
 
-var app = module.exports = express.createServer();
+var app = express.createServer();
 
 /*  foursquare  */
 var config = {
@@ -24,15 +22,23 @@ var foursquare = require("node-foursquare")(config);
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
-io.sockets.on("conntection",function(socket){
-   console.log("User Connected");
-});
+io.sockets.on("connection",function(socket){
 
-var count = 0;
-setInterval(function(){
-  console.log("send message "+count++)
-  io.sockets.emit("message",{ data:"test"+count } ); 
-},4000);
+   console.log("User Connected");
+
+   socket.on("join",function(data){
+     console.log("User Joined "+ data.user);
+     io.sockets.emit("join",data);
+   });
+
+   socket.on("message",function(data){
+     data.date = new Date();
+     console.log("running message");
+     if(data.room){
+       io.sockets.of("/room/"+data.room).emit("message",data); 
+     }
+   });
+});
 
 // Configuration
 app.configure(function(){
