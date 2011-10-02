@@ -17,6 +17,7 @@ if (GBrowserIsCompatible()) {
     var marker = new GMarker(point);
     GEvent.addListener(marker, "click", function() {
       marker.openInfoWindowHtml(html);
+      joinRoom(name);
     });
     // save the info we need to use later for the side_bar
     gmarkers[i] = marker;
@@ -29,14 +30,14 @@ if (GBrowserIsCompatible()) {
 
   // This function picks up the click and opens the corresponding info window
   function myclick(i) {
-   gmarkers[i].openInfoWindowHtml(htmls[i]);
+    gmarkers[i].openInfoWindowHtml(htmls[i]);
   }
 
   // === Define the function thats going to process the JSON file ===
-  process_it = function(doc) {
+  process_it = function(json) {
 
     // === Parse the JSON document === 
-    var jsonData = eval('(' + doc + ')');
+    var jsonData = json;
     
     // === Plot the markers ===
     for (var i=0; i<jsonData.markers.length; i++) {
@@ -45,7 +46,7 @@ if (GBrowserIsCompatible()) {
         jsonData.markers[i].chat + '</h3><div id="avatars" class="avatars">' + 
         jsonData.markers[i].users + 
         '</div><ul id="chatroom"></ul><input id="say" type="text"></input></div></div>';
-      var marker = createMarker(point, jsonData.markers[i].label, chatHtml);
+      var marker = createMarker(point, jsonData.markers[i].chat, chatHtml);
       map.addOverlay(marker);
     }
 
@@ -66,23 +67,10 @@ if (GBrowserIsCompatible()) {
   // ================================================================
   // === Fetch the JSON data file ====    
   // GDownloadUrl("example.json", process_it);
-     
-
 
   // LOAD THE JSON DATA HERE
 	var JSONfeed = '{"markers": [ {"lat":40.728771, "lng":-73.995752, "chat":"HackNY", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, {"lat":40.729218, "lng":-73.996664, "chat":"NYU Stern", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, {"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Three"},{"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Two"}  ]}';
- 
-  // PROCESS THE JSON DATA
-  process_it(JSONfeed);
-
+  //process_it(JSONfeed);
 } else {
   alert("Sorry, the Google Maps API is not compatible with this browser");
 }
-    
- /* var key = 'b7fab9211c8ee5089f1daed2f452b3800a0c328ef4171391753dd5b553a829cf';
-  var api = (cityPrecision) ? "ip-city" : "ip-country";
-  var domain = 'api.ipinfodb.com';
-  var version = 'v3';
-  var url = "http://" + domain + "/" + version + "/" + api + "/?key=" + key + "&format=json" + "&callback=?";
-  var geodata;
-  var JSON = JSON || {}; */

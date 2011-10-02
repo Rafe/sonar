@@ -15,6 +15,12 @@ var config = {
   }
 }
 
+var places = {"markers": [ 
+  {"lat":40.728771, "lng":-73.995752, "chat":"HackNY", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, 
+  {"lat":40.729218, "lng":-73.996664, "chat":"NYU Stern", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, 
+  {"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Three"}
+]}
+
 var foursquare = require("node-foursquare")(config);
 
 //socket.io chat 
@@ -28,14 +34,19 @@ io.sockets.on("connection",function(socket){
 
    console.log("User Connected");
 
+   socket.emit("feeds",places);
+
    socket.on("join",function(data){
-     console.log("User Joined "+ data.user + " Room: " + data.room );
+     socket.set("name",data.name);
+     console.log("User Joined "+ socket.name + " Room: " + data.room );
      //setting users
      data.users = ["Jimmy","John","Jack"];
 
      //register channels
-     console.log("joining..."+data.room);
+     socket.leave(data.previous);
+     console.log("leaving..."+data.previous);
      socket.join(data.room);
+     console.log("joining..."+ socket.name + " to "+data.room);
 
      io.sockets.emit("join room",data);
    });
@@ -47,7 +58,6 @@ io.sockets.on("connection",function(socket){
   });
 
 });
-
 
 // Configuration
 app.configure(function(){
@@ -76,6 +86,7 @@ app.get('/', function(req, res){
   res.render('index', {
     title: 'Sonar'
   });
+  console.log(places);
 });
 
 /**********************************************************/
@@ -100,7 +111,6 @@ app.get('/callback', function (req, res) {
   });
 });
 /**********************************************************/
-
 
 app.listen(80);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

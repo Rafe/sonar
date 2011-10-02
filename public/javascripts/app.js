@@ -16,14 +16,16 @@ $(function(){
     updateUsers(data.users);
   });
 
-// $("#say").keypress(function(event){
+  socket.on("feeds",function(data){
+    process_it(data);
+  });
+
   $("#say").live('keypress', function(event){
     var data = $(event.target).val();
     
     if(event.which == 13){
       sendMessage({
-        user:config.me,
-        data:data,
+        data:data
       })
       event.preventDefault();
     }
@@ -31,6 +33,7 @@ $(function(){
 });
 
 function joinRoom(room){
+  var previous = config.room;
   config.room = room;
   console.log("joining "+ room);
 
@@ -40,8 +43,9 @@ function joinRoom(room){
   });
 
   socket.emit("join",{
-    user: config.me,
-    room: config.room
+    name: config.me,
+    room: config.room,
+    previous: previous
   });
 
   updateRoom(room);
@@ -65,7 +69,7 @@ function sendMessage(data){
     data.room = config.room;
   }
   socket.emit("message",data);
-  data.date = new Date();
+  data.date = new Date().toISOString();
   addMessage(data);
   $("#say").val("");
 }
@@ -76,6 +80,7 @@ function updateRoom(room){
 }
 
 function addMessage(data){
+  data.user = config.me;
   var template = "<li>"+
   "<span class='user'><%= user %></span> says " +
   "<span><%= data %></span> at " +
