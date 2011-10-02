@@ -28,7 +28,7 @@ var foursquare = require("node-foursquare")(config);
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
-var channels = {};
+var rooms = {};
 
 io.sockets.on("connection",function(socket){
 
@@ -39,8 +39,6 @@ io.sockets.on("connection",function(socket){
    socket.on("join",function(data){
      socket.set("name",data.name);
      console.log("User Joined "+ socket.name + " Room: " + data.room );
-     //setting users
-     data.users = ["Jimmy","John","Jack"];
 
      //register channels
      socket.leave(data.previous);
@@ -48,7 +46,9 @@ io.sockets.on("connection",function(socket){
      socket.join(data.room);
      console.log("joining..."+ socket.name + " to "+data.room);
 
-     data.messages = channels[data.room] = channels[data.room] || [];
+     room[data.room] = room[data.room] || {channel:[],users:[]};
+
+     data.messages = room[data.room].channel = nnels[data.room] || [];
      io.sockets.emit("join room",data);
    });
 
@@ -58,7 +58,6 @@ io.sockets.on("connection",function(socket){
     socket.broadcast.to(res.room).emit("message",res); 
     channels[res.room].push(res);
   });
-
 });
 
 // Configuration

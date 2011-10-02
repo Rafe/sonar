@@ -1,6 +1,7 @@
 var config = {
   me : $.cookie("me") || "me",
-  room : "NYHack"
+  room : "NYHack",
+  location:"HackNY"
 };
 
 $(function(){
@@ -72,6 +73,7 @@ function sendMessage(data){
   if(config.room){
     data.room = config.room;
   }
+  data.location = config.location;
   socket.emit("message",data);
   data.date = new Date().toISOString();
   addMessage(data);
@@ -86,9 +88,9 @@ function updateRoom(room){
 function addMessage(data){
   data.user = config.me;
   var template = "<li>"+
-  "<span class='user'<span><%= data %></span> " + 
-  "<span class='chat-meta'> - <%= user %></span> " +
-  "<abbr class='timeago chat-meta' title='<%= date %>'></abbr> " +
+  "<span class='user'><%= user %></span> says " +
+  "<span><%= data %></span> at " +
+  "<abbr class='timeago' title='<%= date %>'></abbr> " +
   "</li>";
   var message = _.template(template,data);
   $("#chatroom").append(message);
