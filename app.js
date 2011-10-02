@@ -2,8 +2,6 @@
  * Module dependencies.
  */
 
-//chat
-
 var express = require('express');
 
 var app = module.exports = express.createServer();
@@ -11,15 +9,15 @@ var app = module.exports = express.createServer();
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
-io.sockets.on("conntection",function(socket){
-   console.log("User Connected");
-});
 
-var count = 0;
-setInterval(function(){
-  console.log("send message "+count++)
-  io.sockets.emit("message",{ data:"test"+count } ); 
-},4000);
+io.sockets.on("connection",function(socket){
+   console.log("User Connected");
+   socket.on("message",function(data){
+     data.date = new Date();
+     console.log("running message");
+     io.sockets.emit("message",data); 
+   });
+});
 
 // Configuration
 app.configure(function(){
