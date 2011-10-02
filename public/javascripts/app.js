@@ -16,7 +16,7 @@ $(function(){
     console.log("updating users");
     console.log(data.messages);
     _.each(data.messages,function(message){
-      addMessage(message) 
+      addMessage(message); 
     });
     updateUsers(data.users);
   });
@@ -74,6 +74,7 @@ function sendMessage(data){
     data.room = config.room;
   }
   data.location = config.location;
+  data.user = config.me;
   socket.emit("message",data);
   data.date = new Date().toISOString();
   addMessage(data);
@@ -86,7 +87,6 @@ function updateRoom(room){
 }
 
 function addMessage(data){
-  data.user = config.me;
   var template = "<li>"+
   "<span class='user'<span><%= data %></span> " + 
   "<span class='chat-meta'> - <%= user %> from <%=location%></span> " +

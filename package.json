@@ -6,8 +6,8 @@
     , "sass": ">= 0.0.1"
     , "ejs": ">= 0.0.1"
     , "socket.io": ">= 0.8.4"
-    , "redis": "0.6.6"
     , "node-foursquare": ">= 0.0.1"
     , "underscore": ">= 0.0.1"
+    , "mongoose": ">= 1.0.0"
   }
 }

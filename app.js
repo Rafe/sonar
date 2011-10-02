@@ -2,8 +2,11 @@
  * Module dependencies.
  */
 
-var express = require('express');
+require.paths.unshift(".");
 
+var model = require("model");
+var _ = require("underscore");
+var express = require('express');
 var app = express.createServer();
 
 /*  foursquare  */
@@ -21,42 +24,54 @@ var places = {"markers": [
   {"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Three"}
 ]}
 
-var channels = {}
-
 var foursquare = require("node-foursquare")(config);
 
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
-var rooms = {};
-
 io.sockets.on("connection",function(socket){
-
    console.log("User Connected");
-
    socket.emit("feeds",places);
 
    socket.on("join",function(data){
      socket.set("name",data.name);
+
      console.log("User Joined "+ socket.name + " Room: " + data.room );
 
-     //register channels
-     socket.leave(data.previous);
+     //join room
      console.log("leaving..."+data.previous);
-     socket.join(data.room);
      console.log("joining..."+ socket.name + " to "+data.room);
+     socket.leave(data.previous);
+     socket.join(data.room);
 
-     room[data.room] = room[data.room] || {channel:[],users:[]};
-
-     data.messages = room[data.room].channel = nnels[data.room] || [];
-     io.sockets.emit("join room",data);
+     model.Room.findOne({name:data.room},function(err,doc){
+       if(!doc){
+         var doc = new model.Room({name:data.room }); 
+         console.log("new room!!");
+         doc.save();
+       }else{
+         //doc.users.push({name:data.name});
+         data.messages = doc.messages;
+         data.users = doc.users;
+         console.log(doc);
+       }
+       io.sockets.emit("join room",data);
+     });
    });
 
   socket.on("message",function(res){
-    res.date = new Date();
-    console.log("boardcasts to "+res.room);
-    socket.broadcast.to(res.room).emit("message",res); 
-    channels[res.room].push(res);
+    model.Room.findOne({name:res.room},function(err,doc){
+      res.date = new Date();
+      doc.messages.push({
+        location: res.location,
+        date : new Date(),
+        user : res.user,
+        data : res.data
+      });
+      doc.save();
+      console.log("boardcasts to "+res.room);
+      socket.broadcast.to(res.room).emit("message",res); 
+    });
   });
 });
 
@@ -87,7 +102,6 @@ app.get('/', function(req, res){
   res.render('index', {
     title: 'Sonar'
   });
-  console.log(places);
 });
 
 /**********************************************************/
