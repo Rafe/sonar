@@ -79,8 +79,8 @@ app.get('/login', function(req, res) {
 
 app.get('/callback', function (req, res) {
   Foursquare.getAccessToken({
-    code: req.query.code
-	redirect_uri: "http://miimenu.com/callback",
+    code: req.query.code ,
+    redirect_uri: "http://miimenu.com/callback",
     client_id: "RJQIJESWVTS4NH4MFD4M0R4XWP0GTT4N540UGLMODADMOG4S",
     client_secret: "TU0Z0TAVCI21IK3Q4ZEMZWJ4CTWYQCGJNZ2E2Z4ECJV1X5ZG"
   }, function (error, accessToken) {
