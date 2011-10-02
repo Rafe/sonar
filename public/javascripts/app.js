@@ -15,20 +15,20 @@ $(function(){
   socket.on("join room",function(data){
     console.log("updating users");
     console.log(data.messages);
+    $("#chatroom").empty();
     _.each(data.messages,function(message){
       addMessage(message); 
     });
-    $("#chatroom").append("<li>"+ config.me+ " Join "+ data.room +"</li>");
     //updateUsers(data.users);
   });
 
   socket.on("feeds",function(data){
-    process_it(data);
+    process(data);
   });
 
   socket.on("venues",function(data){
     console.log(data);
-    processVenues(data);  
+    process(data);  
   });
 
   $("#say").live('keypress', function(event){
@@ -89,7 +89,6 @@ function sendMessage(data){
 
 function updateRoom(room){
   $("#room").text(room);
-  //$("#chatroom").empty().append("you joined room: " + room);
 }
 
 function addMessage(data){
@@ -99,7 +98,6 @@ function addMessage(data){
   "<abbr class='timeago chat-meta' title='<%= date %>'></abbr> " +
   "</li>";
   var message = _.template(template,data);
-  console.log(message);
   $("#chatroom").append(message);
   $("abbr.timeago").timeago();
 }

@@ -19,11 +19,11 @@ var config = {
   }
 }
 
-var places = {"markers": [ 
-  {"lat":40.728771, "lng":-73.995752, "chat":"HackNY", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, 
-  {"lat":40.729218, "lng":-73.996664, "chat":"NYU Stern", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, 
-  {"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Three"}
-]}
+var places = [ 
+  {location:{"lat":40.728771, "lng":-73.995752}, "name":"HackNY","stats":{"checkinsCount":100}}, 
+  {location:{"lat":40.729218, "lng":-73.996664}, "name":"NYU Stern","stats":{"checkinsCount":290}}, 
+  {location:{"lat":40.730779, "lng":-73.997533}, "name":"Washington Sq Park","stats":{"checkinsCount":4000}}, 
+];
 
 var foursquare = require("node-foursquare")(config);
 
@@ -111,7 +111,6 @@ app.get('/', function(req, res){
   });
 });
 
-/**********************************************************/
 app.get('/login', function(req, res) {
   res.writeHead(303, { "location	": foursquare.getAuthClientRedirectUrl() });
   res.end();
@@ -136,7 +135,6 @@ app.get('/callback', function (req, res) {
     }
   });
 });
-/**********************************************************/
 
 app.listen(80);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

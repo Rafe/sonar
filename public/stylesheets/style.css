@@ -17,14 +17,16 @@ a{
     overflow-y: auto;
 }
 
-/*.chat-box{
+#chat-box{
+  zindex:100px;
   position:fixed;
   border-radius: 30px;
   background-color:#EEE;
-  top:80px;
-  left:600px;
-  width:350px;
-}*/
+  top:40px;
+  right:5px;
+  height:600px;
+  width:400px;
+}
     #wrapper {
         padding:0px;
     }
@@ -58,11 +60,14 @@ a{
     -webkit-box-shadow: 3px 3px 5px #CCCCCC;
  }
  
+ ul{
+  padding-left:10px;
+  }
  ul li {
  	list-style-type: none;
  }
  .chat-box.popup {
-     position: relative;
+    position: relative;
     top: -20px;
 }
 .chat-box h3 {
@@ -96,21 +101,21 @@ margin:3px;
 	float: left;
 }
 .checkin {
-background: #EC644B;
-border-radius: 8px 8px 8px 8px;
--moz-border-radius: 8px 8px 8px 8px;
--webkit-border-radius: 8px 8px 8px 8px;
-padding: 3px;
-position: absolute;
-right: 20px;
-width: 150px;
+  background: #EC644B;
+  border-radius: 8px 8px 8px 8px;
+  -moz-border-radius: 8px 8px 8px 8px;
+  -webkit-border-radius: 8px 8px 8px 8px;
+  padding: 3px;
+  position: absolute;
+  right: 20px;
+  width: 150px;
 }
 .connect {
-color: white;
-display: inline;
-font-size: 18px;
-font-weight: bold;
-margin: 10px;
-position: relative;
-top: 10px;
+  color: white;
+  display: inline;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px;
+  position: relative;
+  top: 10px;
 }
