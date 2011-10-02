@@ -1,22 +1,19 @@
 var config = {
-  me : $.cookie("me") || "me"
+  me : $.cookie("me") || "me",
+  room : "NYHack"
 };
 
 $(function(){
   socket = io.connect("/");
-  socket.on("connection",function(){
-    socket.emit("join",{
-      user: config.me
-    });
+
+  socket.on("connect",function(){
     console.log("started");
+    joinRoom(config.room);
   });
 
-  socket.on("join",function(data){
-    $("#say").append("<li>"+ data.user +"</li>");
-  });
-
-  socket.on("message",function(data){
-    addMessage(data);
+  socket.on("join room",function(data){
+    console.log("updating users");
+    updateUsers(data.users);
   });
 
 // $("#say").keypress(function(event){
@@ -31,18 +28,52 @@ $(function(){
       event.preventDefault();
     }
   });
-
-  function joinRoom(room){
-    socket.of("/room/"+room).on("message",function(data){
-      addMessage(data);
-    });
-  }
-
-  function sendMessage(data){
-    socket.emit("message",data);
-    $("#say").val("");
-  }
 });
+
+function joinRoom(room){
+  config.room = room;
+  console.log("joining "+ room);
+
+  socket.on("message",function(data){
+    console.log(data);
+    addMessage(data);
+  });
+
+  socket.emit("join",{
+    user: config.me,
+    room: config.room
+  });
+
+  updateRoom(room);
+}
+
+function updateUsers(users){
+  var avatars = $("#avatars");
+  avatars.empty();
+  _.each(users,function(user){
+    avatars.append("<li>"+ user +"</li>");
+  });
+}
+
+function leaveRoom(){
+  socket.emit("leave room",{room:config.room });
+  config.room = false;
+}
+
+function sendMessage(data){
+  if(config.room){
+    data.room = config.room;
+  }
+  socket.emit("message",data);
+  data.date = new Date();
+  addMessage(data);
+  $("#say").val("");
+}
+
+function updateRoom(room){
+  $("#room").text(room);
+  $("#chatroom").empty().append("you joined room: " + room);
+}
 
 function addMessage(data){
   var template = "<li>"+
