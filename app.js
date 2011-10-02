@@ -17,28 +17,30 @@ var config = {
 
 var foursquare = require("node-foursquare")(config);
 
-
-
 //socket.io chat 
 var io = require("socket.io").listen(app);
+
+var channels = {
+  "hackNY":[]
+};
 
 io.sockets.on("connection",function(socket){
 
    console.log("User Connected");
 
    socket.on("join",function(data){
-     console.log("User Joined "+ data.user);
-     io.sockets.emit("join",data);
-   });
+     console.log("User Joined "+ data.user + " Room: " + data.room );
+     //setting users
+     data.users = ["Jimmy","John","Jack"];
 
-   socket.on("message",function(data){
-     data.date = new Date();
-     console.log("running message");
-     if(data.room){
-       io.sockets.of("/room/"+data.room).emit("message",data); 
-     } else{
-       io.sockets.emit("message",data); 
-     }
+     //register channels
+     socket.on("message",function(res){
+       res.date = new Date();
+       console.log("recieve");
+       io.sockets.emit("message",res); 
+     });
+
+     io.sockets.emit("join room",data);
    });
 });
 
@@ -93,10 +95,6 @@ app.get('/callback', function (req, res) {
   });
 });
 /**********************************************************/
-
-
-
-
 
 
 app.listen(80);
