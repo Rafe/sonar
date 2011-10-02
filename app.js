@@ -8,12 +8,13 @@ var model = require("model");
 var _ = require("underscore");
 var express = require('express');
 var app = express.createServer();
+var token;
 
 /*  foursquare  */
 var config = {
-  "secrets" : {
-    "clientId" : "RJQIJESWVTS4NH4MFD4M0R4XWP0GTT4N540UGLMODADMOG4S",
-    "clientSecret" : "TU0Z0TAVCI21IK3Q4ZEMZWJ4CTWYQCGJNZ2E2Z4ECJV1X5ZG",
+  "secrets":{
+    "clientId" : "QYO1QPEB5G3D5IXAZLBZY0KF4DYWGQV54UQAXH34OHXIKR2T",
+    "clientSecret" : "GUYIUUOFEUCTG3O0TJW3OYQNPEQC22L4MIYVPJTJWHM2QB1L",
     "redirectUrl" : "http://miimenu.com/callback"
   }
 }
@@ -31,6 +32,12 @@ var io = require("socket.io").listen(app);
 
 io.sockets.on("connection",function(socket){
    console.log("User Connected");
+
+   if(token){
+     foursquare.Venues.search(40.728771,-73.995752,{},token,function(err,data){
+       socket.emit("venues",data.venues);
+     });
+   }
    socket.emit("feeds",places);
 
    socket.on("join",function(data){
@@ -51,7 +58,7 @@ io.sockets.on("connection",function(socket){
          doc.save();
        }else{
          //doc.users.push({name:data.name});
-         data.messages = doc.messages;
+         data.messages = doc.messages.slice(-20);
          data.users = doc.users;
          console.log(doc);
        }
@@ -106,22 +113,22 @@ app.get('/', function(req, res){
 
 /**********************************************************/
 app.get('/login', function(req, res) {
-  res.writeHead(303, { "location	": Foursquare.getAuthClientRedirectUrl() });
+  res.writeHead(303, { "location	": foursquare.getAuthClientRedirectUrl() });
   res.end();
 });
 
 app.get('/callback', function (req, res) {
-  Foursquare.getAccessToken({
+  foursquare.getAccessToken({
     code: req.query.code ,
     redirect_uri: "http://miimenu.com/callback",
-    client_id: "RJQIJESWVTS4NH4MFD4M0R4XWP0GTT4N540UGLMODADMOG4S",
-    client_secret: "TU0Z0TAVCI21IK3Q4ZEMZWJ4CTWYQCGJNZ2E2Z4ECJV1X5ZG"
+    client_id: config.secrets.clientId,
+    client_secret: config.secrets.clientSecret
   }, function (error, accessToken) {
-	if(error) {
+    if(error) {
       res.send("An error was thrown: " + error.message);
-    }
-    else {
-      // Save the accessToken and redirect.
+    } else {
+      token = accessToken;
+      res.redirect("/");
     }
   });
 });

@@ -34,44 +34,33 @@ if (GBrowserIsCompatible()) {
     gmarkers[i].openInfoWindowHtml(htmls[i]);
   }
 
-  // === Define the function thats going to process the JSON file ===
-  process_it = function(json) {
+  processVenues = function(data){
+    for (var i=0; i<data.length; i++) {
+      var point = new GLatLng(data[i].location.lat, data[i].location.lng);
+      var chatHtml = '<div class="content"><div class="chat-box popup"><h3>' + 
+        data[i].name + '</h3><div id="avatars" class="avatars">' + 
+        '<img src="https://graph.facebook.com/jimmytcchao/picture?type=small"/><img src="https://graph.facebook.com/42403930/picture?type=small"/><img src="http://thestart.me/images/avatars/darenb.png"/><img src="https://graph.facebook.com/1105177/picture?type=large"/><div style="clear:both;">&nbsp;</div>' + 
+        '</div><ul id="chatroom"></ul><input id="say" type="text"></input></div></div>';
+      var marker = createMarker(point, data[i].name, chatHtml);
+      map.addOverlay(marker);
+    }
+  }
 
-    // === Parse the JSON document === 
+  process_it = function(json) {
     var jsonData = json;
     
-    // === Plot the markers ===
     for (var i=0; i<jsonData.markers.length; i++) {
       var point = new GLatLng(jsonData.markers[i].lat, jsonData.markers[i].lng);
       var chatHtml = '<div class="content"><div class="chat-box popup"><h3>' + 
         jsonData.markers[i].chat + '</h3><div id="avatars" class="avatars">' + 
-        /*jsonData.markers[i].users*/'<img src="https://graph.facebook.com/jimmytcchao/picture?type=small"/><img src="https://graph.facebook.com/42403930/picture?type=small"/><img src="http://thestart.me/images/avatars/darenb.png"/><img src="https://graph.facebook.com/1105177/picture?type=large"/><div style="clear:both;">&nbsp;</div>' + 
+        '<img src="https://graph.facebook.com/jimmytcchao/picture?type=small"/><img src="https://graph.facebook.com/42403930/picture?type=small"/><img src="http://thestart.me/images/avatars/darenb.png"/><img src="https://graph.facebook.com/1105177/picture?type=large"/><div style="clear:both;">&nbsp;</div>' + 
         '</div><ul id="chatroom"></ul><input id="say" type="text"></input></div></div>';
       var marker = createMarker(point, jsonData.markers[i].chat, chatHtml);
       map.addOverlay(marker);
     }
-
-    // get chat name and users
-    // put the assembled side_bar_html contents into the side_bar div
-    document.getElementById("side_bar").innerHTML = side_bar_html;
-
-    // === Plot the polylines ===
-    for (var i=0; i<jsonData.lines.length; i++) {
-      var pts = [];
-      for (var j=0; j<jsonData.lines[i].points.length; j++) {
-        pts[j] = new GLatLng(jsonData.lines[i].points[j].lat, jsonData.lines[i].points[j].lng);
-      }
-      map.addOverlay(new GPolyline(pts, jsonData.lines[i].colour, jsonData.lines[i].width)); 
-    }
   }          
       
-  // ================================================================
-  // === Fetch the JSON data file ====    
-  // GDownloadUrl("example.json", process_it);
-
-  // LOAD THE JSON DATA HERE
 	var JSONfeed = '{"markers": [ {"lat":40.728771, "lng":-73.995752, "chat":"HackNY", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, {"lat":40.729218, "lng":-73.996664, "chat":"NYU Stern", "users":"Jimmy, Daren, Ray", "label":"Marker One"}, {"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Three"},{"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Two"}  ]}';
-  //process_it(JSONfeed);
 } else {
   alert("Sorry, the Google Maps API is not compatible with this browser");
 }

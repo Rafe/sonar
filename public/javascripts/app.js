@@ -25,6 +25,11 @@ $(function(){
     process_it(data);
   });
 
+  socket.on("venues",function(data){
+    console.log(data);
+    processVenues(data);  
+  });
+
   $("#say").live('keypress', function(event){
     var data = $(event.target).val();
     
