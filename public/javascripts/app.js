@@ -1,6 +1,6 @@
 var config = {
   me : $.cookie("me") || "me",
-  room : "NYHack",
+  room : "HackNY",
   location:"HackNY"
 };
 
@@ -45,6 +45,7 @@ $(function(){
 
 function joinRoom(room){
   var previous = config.room;
+  console.log(previous);
   config.room = room;
   console.log("joining "+ room);
 

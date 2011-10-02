@@ -46,8 +46,7 @@ io.sockets.on("connection",function(socket){
      console.log("User Joined "+ socket.name + " Room: " + data.room );
 
      //join room
-     console.log("leaving..."+data.previous);
-     console.log("joining..."+ socket.name + " to "+data.room);
+     console.log("leaving..."+data.previous + " joining..."+data.room);
      socket.leave(data.previous);
      socket.join(data.room);
 
@@ -57,16 +56,15 @@ io.sockets.on("connection",function(socket){
          console.log("new room!!");
          doc.save();
        }else{
-         //doc.users.push({name:data.name});
-         data.messages = doc.messages.slice(-20);
+         data.messages = doc.messages.slice(-25);
          data.users = doc.users;
-         console.log(doc);
+         //console.log(doc);
        }
        io.sockets.emit("join room",data);
      });
    });
-
   socket.on("message",function(res){
+    console.log("boardcasts to "+res.room);
     model.Room.findOne({name:res.room},function(err,doc){
       res.date = new Date();
       doc.messages.push({
@@ -76,7 +74,6 @@ io.sockets.on("connection",function(socket){
         data : res.data
       });
       doc.save();
-      console.log("boardcasts to "+res.room);
       socket.broadcast.to(res.room).emit("message",res); 
     });
   });
