@@ -1,9 +1,9 @@
-    if (GBrowserIsCompatible()) {
+	    if (GBrowserIsCompatible()) {
       // Display the map, with some controls
       var map = new GMap(document.getElementById("map"));
       map.addControl(new GLargeMapControl());
       map.addControl(new GMapTypeControl());
-      map.setCenter(new GLatLng(40.728771,-73.995752),16);
+      map.setCenter(new GLatLng(40.728770,-73.995752),16);
    
       // arrays to hold copies of the markers and html used by the side_bar
       // because the function closure trick doesnt work there

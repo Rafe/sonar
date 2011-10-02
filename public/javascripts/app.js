@@ -77,9 +77,9 @@ function updateRoom(room){
 
 function addMessage(data){
   var template = "<li>"+
-  "<span class='user'><%= user %></span> says " +
-  "<span><%= data %></span> at " +
-  "<abbr class='timeago' title='<%= date %>'></abbr> " +
+  "<span class='user'<span><%= data %></span> " + 
+  "<span class='chat-meta'> - <%= user %></span> " +
+  "<abbr class='timeago chat-meta' title='<%= date %>'></abbr> " +
   "</li>";
   var message = _.template(template,data);
   $("#chatroom").append(message);
