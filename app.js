@@ -34,15 +34,20 @@ io.sockets.on("connection",function(socket){
      data.users = ["Jimmy","John","Jack"];
 
      //register channels
-     socket.on("message",function(res){
-       res.date = new Date();
-       console.log("recieve");
-       io.sockets.emit("message",res); 
-     });
+     console.log("joining..."+data.room);
+     socket.join(data.room);
 
      io.sockets.emit("join room",data);
    });
+
+  socket.on("message",function(res){
+    res.date = new Date();
+    console.log("boardcasts to "+res.room);
+    socket.broadcast.to(res.room).emit("message",res); 
+  });
+
 });
+
 
 // Configuration
 app.configure(function(){

@@ -31,8 +31,10 @@ $(function(){
 
 function joinRoom(room){
   config.room = room;
+  console.log("joining "+ room);
 
   socket.on("message",function(data){
+    console.log(data);
     addMessage(data);
   });
 
@@ -53,6 +55,7 @@ function updateUsers(users){
 }
 
 function leaveRoom(){
+  socket.emit("leave room",{room:config.room });
   config.room = false;
 }
 
@@ -61,6 +64,8 @@ function sendMessage(data){
     data.room = config.room;
   }
   socket.emit("message",data);
+  data.date = new Date();
+  addMessage(data);
   $("#say").val("");
 }
 
