@@ -1,6 +1,7 @@
 var config = {
   me : $.cookie("me") || "me",
-  room : "NYHack"
+  room : "NYHack",
+  location:"HackNY"
 };
 
 $(function(){
@@ -72,6 +73,7 @@ function sendMessage(data){
   if(config.room){
     data.room = config.room;
   }
+  data.location = config.location;
   socket.emit("message",data);
   data.date = new Date().toISOString();
   addMessage(data);
