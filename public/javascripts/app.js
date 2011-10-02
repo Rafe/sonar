@@ -18,7 +18,7 @@ $(function(){
     _.each(data.messages,function(message){
       addMessage(message); 
     });
-    updateUsers(data.users);
+    //updateUsers(data.users);
   });
 
   socket.on("feeds",function(data){
@@ -83,16 +83,17 @@ function sendMessage(data){
 
 function updateRoom(room){
   $("#room").text(room);
-  $("#chatroom").empty().append("you joined room: " + room);
+  //$("#chatroom").empty().append("you joined room: " + room);
 }
 
 function addMessage(data){
   var template = "<li>"+
-  "<span class='user'<span><%= data %></span> " + 
+  "<span class='user'><%= data %></span> " + 
   "<span class='chat-meta'> - <%= user %> from <%=location%></span> " +
   "<abbr class='timeago chat-meta' title='<%= date %>'></abbr> " +
   "</li>";
   var message = _.template(template,data);
+  console.log(message);
   $("#chatroom").append(message);
   $("abbr.timeago").timeago();
 }
