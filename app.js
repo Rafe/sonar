@@ -2,27 +2,21 @@
  * Module dependencies.
  */
 
-<<<<<<< HEAD
-//test
-=======
-//chat
->>>>>>> 02916257a755bb0b2cbb255553e8d79427c9c6b8
-
 var express = require('express');
 
 var app = module.exports = express.createServer();
 
 //socket.io chat 
-var chat = require("socket.io").listen(app);
+var io = require("socket.io").listen(app);
 
-chat
-  .of("/join")
-  .on("conntection",function(socket){
-   console.log("test socket");
-});
 
-setInterval(4000,function(){
-  chat.emit("message",{data:"test"}); 
+io.sockets.on("connection",function(socket){
+   console.log("User Connected");
+   socket.on("message",function(data){
+     data.date = new Date();
+     console.log("running message");
+     io.sockets.emit("message",data); 
+   });
 });
 
 // Configuration

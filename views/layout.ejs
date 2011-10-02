@@ -6,20 +6,49 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery.js"><script>
     <script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
+    <script src="http://documentcloud.github.com/backbone/test/vendor/json2.js"></script>
+    <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
+    <script src="/javascripts/jquery.cookie.js"></script>
     <script>
+      var config = {}
+      config.user = $.cookie("me") || "me";
       $(function(){
-        var socket = io.connect("http://miimenu.com");
+        socket = io.connect("http://miimenu.com");
         socket.on("connection",function(){
           console.log("started");
         });
 
-        socket.on("message",function(){
-          addMessage();
+        socket.on("message",function(data){
+          addMessage(data);
         });
+
+        $("#say").keypress(function(event){
+          var data = $(event.target).val();
+          
+          if(event.which == 13){
+            sendMessage({
+              user:config.me,
+              data:data,
+            })
+            event.preventDefault();
+          }
+        });
+
+        function sendMessage(data){
+          //navigator.geolocation.getCurrentLocation(function(position){
+          //  data.lat = position.coords.latitudes;
+          //  data.lon = position.coords.longitude;
+            socket.emit("message",data);
+            $("#say").val("");
+          //});
+        }
       });
 
-      function addMessage(){
-        $("#chatroom").append("<li>this is a message</li>")
+      function addMessage(data){
+        $("#chatroom").append("<li><span class='user'>"+data.user +"</span> says "+ data.data+
+          " at <abbr class='timeago' title='"+ data.date +
+          "'></abbr></li>");
+        $("abbr.timeago").timeago();
       }
     </script>
   </head>
