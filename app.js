@@ -21,14 +21,14 @@ var places = {"markers": [
   {"lat":40.730779, "lng":-73.997533, "chat":"Washington Sq Park", "users":"Jimmy, Daren, Ray", "label":"Marker Three"}
 ]}
 
+var channels = {}
+
 var foursquare = require("node-foursquare")(config);
 
 //socket.io chat 
 var io = require("socket.io").listen(app);
 
-var channels = {
-  "hackNY":[]
-};
+var channels = {};
 
 io.sockets.on("connection",function(socket){
 
@@ -48,6 +48,7 @@ io.sockets.on("connection",function(socket){
      socket.join(data.room);
      console.log("joining..."+ socket.name + " to "+data.room);
 
+     data.messages = channels[data.room] = channels[data.room] || [];
      io.sockets.emit("join room",data);
    });
 
@@ -55,6 +56,7 @@ io.sockets.on("connection",function(socket){
     res.date = new Date();
     console.log("boardcasts to "+res.room);
     socket.broadcast.to(res.room).emit("message",res); 
+    channels[res.room].push(res);
   });
 
 });

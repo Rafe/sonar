@@ -13,6 +13,10 @@ $(function(){
 
   socket.on("join room",function(data){
     console.log("updating users");
+    console.log(data.messages);
+    _.each(data.messages,function(message){
+      addMessage(message) 
+    });
     updateUsers(data.users);
   });
 
