@@ -2,9 +2,7 @@
  * Module dependencies.
  */
 
-require.paths.unshift(".");
-
-var model = require("model");
+var model = require("./model");
 var _ = require("underscore");
 var express = require('express');
 var app = express.createServer();
@@ -133,6 +131,6 @@ app.get('/callback', function (req, res) {
   });
 });
 
-app.listen(80);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+app.listen(8080);
+//console.log("Express server listening on port %d in %s mode", p.address().port, app.settings.env);
 

@@ -2,12 +2,14 @@
     "name": "sonar"
   , "version": "0.0.1"
   , "dependencies": {
-      "express": "2.4.6"
+      "express": ">=2.4.6"
     , "sass": ">= 0.0.1"
     , "ejs": ">= 0.0.1"
     , "socket.io": ">= 0.8.4"
+    , "socket.io-client": ">= 0.8.4"
     , "node-foursquare": ">= 0.0.1"
     , "underscore": ">= 0.0.1"
     , "mongoose": ">= 1.0.0"
+    , "log4js": ">= 0.0.1"
   }
 }
